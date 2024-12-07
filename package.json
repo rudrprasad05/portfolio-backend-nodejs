@@ -1,0 +1,30 @@
+{
+  "name": "portfolio-backend-nodejs",
+  "version": "1.0.0",
+  "description": "backend application for resume frontend",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rudrprasad05/portfolio-backend-nodejs.git"
+  },
+  "author": "rudr prasad",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rudrprasad05/portfolio-backend-nodejs/issues"
+  },
+  "homepage": "https://github.com/rudrprasad05/portfolio-backend-nodejs#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mysql2": "^3.11.5"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.1",
+    "nodemon": "^3.1.7",
+    "typescript": "^5.7.2"
+  }
+}
