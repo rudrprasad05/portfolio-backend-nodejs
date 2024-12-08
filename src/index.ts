@@ -1,13 +1,15 @@
 import express from "express";
 import dotenv from "dotenv";
 import pool from "./db";
-
+import { Logger, loggingMiddleware } from "@rudrprasad05/logs";
 dotenv.config();
 
 const app = express();
+const logger = new Logger();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(loggingMiddleware(logger));
 
 app.get("/ping", async (_req, res) => {
   try {

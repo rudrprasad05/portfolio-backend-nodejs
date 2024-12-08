@@ -4,6 +4,7 @@
   "description": "backend application for resume frontend",
   "main": "src/index.js",
   "scripts": {
+    "dev": "npx nodemon src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/rudrprasad05/portfolio-backend-nodejs#readme",
   "dependencies": {
+    "@rudrprasad05/logs": "^1.0.13",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "mysql2": "^3.11.5"
@@ -25,6 +27,7 @@
     "@types/express": "^5.0.0",
     "@types/node": "^22.10.1",
     "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }
 }
