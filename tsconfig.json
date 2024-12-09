@@ -6,7 +6,8 @@
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "types": ["node", "@prisma/client"]
   },
   "exclude": ["node_modules", "dist"]
 }
