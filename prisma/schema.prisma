@@ -22,13 +22,20 @@ enum ContentType {
   CODE
 }
 
+enum UserType {
+  ADMIN
+  USER
+}
+
 model User {
-  id        Int       @id @default(autoincrement())
-  email     String    @unique
-  name      String
-  createdAt DateTime  @default(now())
-  posts     Post[]
-  comments  Comment[]
+  id             Int       @id @default(autoincrement())
+  email          String    @unique
+  name           String
+  hashedPassword String
+  createdAt      DateTime  @default(now())
+  type           UserType  @default(USER)
+  posts          Post[]
+  comments       Comment[]
 }
 
 model Post {
