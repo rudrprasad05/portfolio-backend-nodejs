@@ -20,6 +20,7 @@ enum ContentType {
   H3
   LINK
   CODE
+  IMAGE
 }
 
 enum UserType {
@@ -36,18 +37,30 @@ model User {
   type           UserType  @default(USER)
   posts          Post[]
   comments       Comment[]
+  media          Media[]
 }
 
 model Post {
-  id             Int            @id @default(autoincrement())
-  title          String
-  content        Content[]
-  publishedAt    DateTime       @default(now())
-  authorId       Int
-  author         User           @relation(fields: [authorId], references: [id])
-  postCategories PostCategory[]
-  comments       Comment[]
-  createdAt      DateTime       @default(now())
+  id              Int            @id @default(autoincrement())
+  title           String
+  content         Content[]
+  featuredImageId Int?
+  featuredImage   Media?         @relation(fields: [featuredImageId], references: [id])
+  publishedAt     DateTime       @default(now())
+  authorId        Int
+  author          User           @relation(fields: [authorId], references: [id])
+  postCategories  PostCategory[]
+  comments        Comment[]
+  createdAt       DateTime       @default(now())
+}
+
+model Media {
+  id        Int      @id @default(autoincrement())
+  size      String   @default("0")
+  createdAt DateTime @default(now())
+  post      Post[]
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
 }
 
 model Content {
