@@ -7,25 +7,48 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import prisma from "./db/prisma";
 import { Login } from "./routes/auth/post";
+import { authenticateToken } from "./middleware/jwt";
 
 dotenv.config();
 
 const app = express();
 const logger = new Logger();
 const PORT = process.env.PORT || 3000;
-const JSON = process.env.JSON;
+const JWT_SECRET = process.env.JSON;
 
 app.use(express.json());
 app.use(loggingMiddleware(logger));
 app.use(cors());
 
-app.get("/ping", async (_req, res) => {
+app.get("/admin", async () => {
+  console.log("res");
+});
+
+app.get("/ping", async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT 1");
     res.json({ message: "Pong", rows });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Database connection failed" });
+  }
+});
+
+app.post("/token", async (req, res) => {
+  try {
+    const token = req.headers["authorization"];
+    if (!token) {
+      res.status(403).json({ error: "no token" });
+      return;
+    }
+    console.log(token);
+    const decoded = jwt.verify(token, JWT_SECRET as string);
+
+    res.status(200).json({ message: "ok" });
+    return;
+  } catch (error) {
+    res.status(403).json({ error: "invalid token" });
+    return;
   }
 });
 
@@ -48,7 +71,7 @@ app.post("/auth/register", async (req, res) => {
       },
     });
 
-    const token = jwt.sign({ userId: email }, JSON as string, {
+    const token = jwt.sign({ userId: email }, JWT_SECRET as string, {
       expiresIn: "1h",
     });
 
@@ -65,8 +88,10 @@ app.post("/auth/register", async (req, res) => {
 app.post("/auth/login", async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log(email, password);
 
     if (!email || !password) {
+      console.log("1");
       res.status(400).json({ message: "invalid json" });
       return;
     }
@@ -78,18 +103,22 @@ app.post("/auth/login", async (req, res) => {
     });
 
     if (!user) {
+      console.log("2");
       res.status(400).json({ message: "invalid creds" });
       return;
     }
 
-    const isCorrectPassword = await bcrypt.compare(
-      user.hashedPassword,
-      password
-    );
-    if (!isCorrectPassword) {
+    const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+
+    if (!isPasswordValid) {
+      console.log("3");
       res.status(400).json({ message: "invalid creds" });
       return;
     }
+    const token = jwt.sign({ userId: email }, JWT_SECRET as string, {
+      expiresIn: "1h",
+    });
+    res.status(200).json({ message: "success", token: token });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
