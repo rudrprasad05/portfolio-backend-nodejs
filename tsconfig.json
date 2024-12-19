@@ -2,11 +2,11 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "CommonJS",
-    "rootDir": ".",
+    "rootDir": "./",
     "outDir": "dist",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "types": ["node", "@prisma/client"]
   },
   "include": ["src/**/*"],

@@ -1,5 +1,5 @@
 import prisma from "../../db/prisma";
-import { UserType } from "src/types";
+import { UserType } from "../../../src/types";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
@@ -9,10 +9,8 @@ const JWT_SECRET = process.env.JSON;
 export async function Login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
-    console.log(email, password);
 
     if (!email || !password) {
-      console.log("1");
       res.status(400).json({ message: "invalid json" });
       return;
     }
@@ -24,7 +22,6 @@ export async function Login(req: Request, res: Response) {
     });
 
     if (!user) {
-      console.log("2");
       res.status(400).json({ message: "invalid creds" });
       return;
     }
@@ -32,14 +29,13 @@ export async function Login(req: Request, res: Response) {
     const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
 
     if (!isPasswordValid) {
-      console.log("3");
       res.status(400).json({ message: "invalid creds" });
       return;
     }
     const token = jwt.sign({ userId: email }, JWT_SECRET as string, {
       expiresIn: "1h",
     });
-    res.status(200).json({ message: "success", token: token });
+    res.status(200).json({ message: "success", token: token, user: user });
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }

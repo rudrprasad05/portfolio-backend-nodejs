@@ -39,7 +39,6 @@ model User {
   comments       Comment[]
   media          Media[]
 }
-
 model Post {
   id              Int            @id @default(autoincrement())
   title           String
