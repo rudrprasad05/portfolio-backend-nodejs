@@ -25,8 +25,6 @@ export async function NewPost(req: Request, res: Response) {
 export async function UpdatePost(req: Request, res: Response) {
   const { id, data } = req.body;
 
-  console.log(id, data);
-
   const post = await prisma.post.update({
     where: {
       id: Number(id),

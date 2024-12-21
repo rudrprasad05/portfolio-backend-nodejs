@@ -7,12 +7,14 @@ import { Login, Register } from "./routes/auth/post";
 import { GetAllCategory } from "./routes/category/get";
 import { NewCategory } from "./routes/category/post";
 import { CreateContent } from "./routes/content/post";
+import { GetAllMedia } from "./routes/media/get";
 import { Ping } from "./routes/ping/get";
 import { GetAllPosts, GetSinglePost } from "./routes/post/get";
 import { NewPost, UpdatePost } from "./routes/post/post";
 import { GenerateToken } from "./routes/token/post";
+import path from "path";
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 const logger = new Logger();
@@ -34,6 +36,8 @@ app.get("/posts", (req, res) => {
   return GetAllPosts(req, res);
 });
 app.get("/category", GetAllCategory);
+app.get("/media", GetAllMedia);
+
 app.post("/category/new", NewCategory);
 app.post("/content/create", CreateContent);
 app.post("/posts/new", NewPost);

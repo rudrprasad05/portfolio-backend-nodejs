@@ -1,16 +1,20 @@
-import prisma from "../../db/prisma";
-import { UserType } from "../../../src/types";
 import bcrypt from "bcrypt";
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import prisma from "../../db/prisma";
+import path from "path";
+import dotenv from "dotenv";
 
-const JWT_SECRET = process.env.JSON;
+dotenv.config();
+
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function Login(req: Request, res: Response) {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
+      console.log("first");
       res.status(400).json({ message: "invalid json" });
       return;
     }
@@ -21,21 +25,39 @@ export async function Login(req: Request, res: Response) {
       },
     });
 
+    console.log(user);
+
     if (!user) {
+      console.log("2");
       res.status(400).json({ message: "invalid creds" });
       return;
     }
+
+    console.log("3");
 
     const isPasswordValid = await bcrypt.compare(password, user.hashedPassword);
+    console.log("4");
 
     if (!isPasswordValid) {
+      console.log("3");
+
       res.status(400).json({ message: "invalid creds" });
       return;
     }
-    const token = jwt.sign({ userId: email }, JWT_SECRET as string, {
-      expiresIn: "1h",
-    });
-    res.status(200).json({ message: "success", token: token, user: user });
+    console.log(JWT_SECRET);
+
+    try {
+      const token = jwt.sign({ userId: email }, JWT_SECRET as string, {
+        expiresIn: "1h",
+      });
+      console.log("Token:", token);
+      res.status(200).json({ message: "success", token: token, user: user });
+      return;
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "success", token: "", user: user });
+      return;
+    }
   } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
